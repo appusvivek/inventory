@@ -10,6 +10,9 @@
             <div class="col-md-4">
                 <manufacturer-component></manufacturer-component>
             </div>
+            <div class="col-md-6">
+                <view-manufacturer-component></view-manufacturer-component>
+            </div>
         </div>
     </div>
   
@@ -17,13 +20,15 @@
 
 <script>
     import ManufacturerComponent from './Manufacturer.vue';
+    import ViewManufacturerComponent from './Viewmanufacturer.vue';
 
     export default {
         mounted() {
             console.log('Component mounted.')
         },
         components: {
-            ManufacturerComponent
+            ManufacturerComponent,
+            ViewManufacturerComponent
         }
     }
 </script>
