@@ -30,6 +30,7 @@ Vue.config.performance = true;
 Vue.component('example-component', require('./components/App.vue').default);
 
 import App from './components/App.vue';
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
