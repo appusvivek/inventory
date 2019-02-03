@@ -1950,16 +1950,19 @@ __webpack_require__.r(__webpack_exports__);
       console.log(error);
     });
     window.axios.get('/api/car').then(function (response) {
-      //console.log(response.data);
       _this.cars = response.data;
+
+      if (_this.cars.length > 0) {
+        _this.table2 = true;
+      }
     }).catch(function (error) {
-      // handle error
       console.log(error);
     });
   },
   data: function data() {
     return {
       manufacturers: [],
+      table2: false,
       form: {
         carname: '',
         color: '',
@@ -2001,6 +2004,8 @@ __webpack_require__.r(__webpack_exports__);
         image2: this.form.image2,
         manufacturer_id: this.form.manufacturer
       }).then(function (response) {
+        _this2.table2 = true;
+
         _this2.cars.push(response.data);
 
         _this2.form.carname = '';
@@ -2089,8 +2094,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _public_storage_files_media_sample_png__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../public/storage/files/media-sample.png */ "./storage/app/public/files/media-sample.png");
-/* harmony import */ var _public_storage_files_media_sample_png__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_public_storage_files_media_sample_png__WEBPACK_IMPORTED_MODULE_0__);
 //
 //
 //
@@ -2133,7 +2136,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2166,10 +2168,8 @@ __webpack_require__.r(__webpack_exports__);
     var _this = this;
 
     window.axios.get('/api/inventory').then(function (response) {
-      //console.log(response.data);
       _this.list = response.data;
     }).catch(function (error) {
-      // handle error
       console.log(error);
     });
   },
@@ -2185,6 +2185,13 @@ __webpack_require__.r(__webpack_exports__);
       }).catch(function (error) {
         console.log(error);
       });
+      window.axios.post('/api/getpicture', {
+        picture: record.image2
+      }).then(function (response) {
+        _this2.modal.image2 = response.data;
+      }).catch(function (error) {
+        console.log(error);
+      });
       this.modal.carname = record.carname;
       this.modal.color = record.color;
       this.modal.manufacture_year = record.manufacture_year;
@@ -2192,21 +2199,17 @@ __webpack_require__.r(__webpack_exports__);
       this.modal.note = record.note;
       this.modal.manufacturer = record.name;
       this.modal.carid = record.id;
-      this.modal.index = index; //this.modal.image1 = record.image1;
-
-      this.modal.image2 = record.image2;
+      this.modal.index = index;
       this.$refs.myModalRef.show();
     },
     hideModal: function hideModal() {
       var _this3 = this;
 
       window.axios.delete('/api/car/' + this.modal.carid).then(function (response) {
-        //console.log(response);
         _this3.list.splice(_this3.modal.index, 1);
 
         _this3.$refs.myModalRef.hide();
       }).catch(function (error) {
-        // handle error
         console.log(error);
       });
     }
@@ -2270,6 +2273,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      table: false,
       form: {
         manufacturername: ''
       },
@@ -2287,6 +2291,10 @@ __webpack_require__.r(__webpack_exports__);
     window.axios.get('/api/manufacturer').then(function (response) {
       //console.log(response.data);
       _this.manufacturers = response.data;
+
+      if (_this.manufacturers.length > 0) {
+        _this.table = true;
+      }
     }).catch(function (error) {
       // handle error
       console.log(error);
@@ -2301,6 +2309,8 @@ __webpack_require__.r(__webpack_exports__);
       window.axios.post('/api/manufacturer', {
         name: this.form.manufacturername
       }).then(function (response) {
+        _this2.table = true;
+
         _this2.manufacturers.push(response.data);
 
         _this2.form.manufacturername = ''; //console.log(response);
@@ -2328,6 +2338,10 @@ __webpack_require__.r(__webpack_exports__);
       window.axios.delete('/api/manufacturer/' + data.item.id).then(function (response) {
         //console.log(response);
         _this4.manufacturers.splice(data.index, 1);
+
+        if (_this4.manufacturers.length < 1) {
+          _this4.table = false;
+        }
       }).catch(function (error) {
         // handle error
         console.log(error);
@@ -22755,7 +22769,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\nlabel {\n  margin: 10px !important;\n}\nfieldset {\n  margin: 5%;\n}\n\n\n", ""]);
+exports.push([module.i, "\nlabel {\n  margin: 10px !important;\n}\nfieldset {\n  width: 100%;\n  margin-top: 5% !important;\n}\n.form-group {\n  margin: 5px;\n}\n#color {\n  width: 150%;\n}\n.uploader-example {\n  width: 150%;\n  padding: 15px;\n  margin: 0px auto 0;\n  font-size: 12px;\n  box-shadow: 0 0 10px rgba(0, 0, 0, .4);\n}\n.uploader-example .uploader-btn {\n  margin-right: 4px;\n}\n.uploader-example .uploader-list {\n  max-height: 440px;\n  overflow: auto;\n  overflow-x: hidden;\n  overflow-y: auto;\n}\n\n", ""]);
 
 // exports
 
@@ -55794,7 +55808,7 @@ var render = function() {
                   },
                   [
                     _c("b-form-textarea", {
-                      staticStyle: { width: "100%" },
+                      staticStyle: { width: "150%" },
                       attrs: {
                         id: "note",
                         placeholder: "Enter Notes..",
@@ -55934,47 +55948,51 @@ var render = function() {
       "div",
       { staticClass: "col-md-6" },
       [
-        _c("b-table", {
-          attrs: {
-            bordered: "",
-            hover: "",
-            items: _vm.cars,
-            fields: _vm.fields
-          },
-          scopedSlots: _vm._u([
-            {
-              key: "Sl No",
-              fn: function(data) {
-                return [_vm._v("\n    " + _vm._s(data.index + 1) + "\n    ")]
-              }
-            },
-            {
-              key: "carname",
-              fn: function(data) {
-                return [_vm._v("\n    " + _vm._s(data.value) + "\n    ")]
-              }
-            },
-            {
-              key: "Action",
-              fn: function(data) {
-                return [
-                  _c(
-                    "b-button",
-                    {
-                      attrs: { variant: "danger", size: "sm" },
-                      on: {
-                        click: function($event) {
-                          _vm.deleteBtn(data)
-                        }
-                      }
-                    },
-                    [_vm._v("Delete")]
-                  )
-                ]
-              }
-            }
-          ])
-        })
+        _vm.table2
+          ? _c("b-table", {
+              attrs: {
+                bordered: "",
+                hover: "",
+                items: _vm.cars,
+                fields: _vm.fields
+              },
+              scopedSlots: _vm._u([
+                {
+                  key: "Sl No",
+                  fn: function(data) {
+                    return [
+                      _vm._v("\n    " + _vm._s(data.index + 1) + "\n    ")
+                    ]
+                  }
+                },
+                {
+                  key: "carname",
+                  fn: function(data) {
+                    return [_vm._v("\n    " + _vm._s(data.value) + "\n    ")]
+                  }
+                },
+                {
+                  key: "Action",
+                  fn: function(data) {
+                    return [
+                      _c(
+                        "b-button",
+                        {
+                          attrs: { variant: "danger", size: "sm" },
+                          on: {
+                            click: function($event) {
+                              _vm.deleteBtn(data)
+                            }
+                          }
+                        },
+                        [_vm._v("Delete")]
+                      )
+                    ]
+                  }
+                }
+              ])
+            })
+          : _vm._e()
       ],
       1
     )
@@ -56194,51 +56212,55 @@ var render = function() {
       "div",
       { staticClass: "col-md-6" },
       [
-        _c("b-table", {
-          attrs: {
-            bordered: "",
-            hover: "",
-            items: _vm.manufacturers,
-            fields: _vm.fields
-          },
-          scopedSlots: _vm._u([
-            {
-              key: "Sl No",
-              fn: function(data) {
-                return [
-                  _vm._v("\n          " + _vm._s(data.index + 1) + "\n        ")
-                ]
-              }
-            },
-            {
-              key: "name",
-              fn: function(data) {
-                return [
-                  _vm._v("\n          " + _vm._s(data.value) + "\n        ")
-                ]
-              }
-            },
-            {
-              key: "Action",
-              fn: function(data) {
-                return [
-                  _c(
-                    "b-button",
-                    {
-                      attrs: { variant: "danger", size: "sm" },
-                      on: {
-                        click: function($event) {
-                          _vm.deleteBtn(data)
-                        }
-                      }
-                    },
-                    [_vm._v("Delete")]
-                  )
-                ]
-              }
-            }
-          ])
-        })
+        _vm.table
+          ? _c("b-table", {
+              attrs: {
+                bordered: "",
+                hover: "",
+                items: _vm.manufacturers,
+                fields: _vm.fields
+              },
+              scopedSlots: _vm._u([
+                {
+                  key: "Sl No",
+                  fn: function(data) {
+                    return [
+                      _vm._v(
+                        "\n          " + _vm._s(data.index + 1) + "\n        "
+                      )
+                    ]
+                  }
+                },
+                {
+                  key: "name",
+                  fn: function(data) {
+                    return [
+                      _vm._v("\n          " + _vm._s(data.value) + "\n        ")
+                    ]
+                  }
+                },
+                {
+                  key: "Action",
+                  fn: function(data) {
+                    return [
+                      _c(
+                        "b-button",
+                        {
+                          attrs: { variant: "danger", size: "sm" },
+                          on: {
+                            click: function($event) {
+                              _vm.deleteBtn(data)
+                            }
+                          }
+                        },
+                        [_vm._v("Delete")]
+                      )
+                    ]
+                  }
+                }
+              ])
+            })
+          : _vm._e()
       ],
       1
     )
@@ -70607,17 +70629,6 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
-
-/***/ }),
-
-/***/ "./storage/app/public/files/media-sample.png":
-/*!***************************************************!*\
-  !*** ./storage/app/public/files/media-sample.png ***!
-  \***************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "/images/media-sample.png?2c1601f79e360c5240a885294b92651b";
 
 /***/ }),
 

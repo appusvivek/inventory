@@ -54,7 +54,7 @@
                      v-model="form.note"
                      placeholder="Enter Notes.."
                      :rows="3"
-                     :max-rows="6" style="width:100%;">
+                     :max-rows="6" style="width:150%;">
                 </b-form-textarea>
           </b-form-group>
         
@@ -96,7 +96,7 @@
        </b-form>
     </div>
     <div class="col-md-6">
-      <b-table bordered hover :items="cars" :fields="fields">
+      <b-table bordered hover :items="cars" :fields="fields" v-if="table2">
 
       <template slot="Sl No" slot-scope="data">
       {{data.index + 1}}
@@ -121,11 +121,12 @@ export default {
     window.axios.get('/api/manufacturer')
     .then((response) => {
         //console.log(response.data);
+
         $.each(response.data, (key, val) => {
           const obj = { value: val.id, text: val.name};
           this.manufacturers.push(obj);
         });
-        //this.manufacturers = response.data;
+         //this.manufacturers = response.data;
     })
     .catch(function (error) {
       // handle error
@@ -134,19 +135,20 @@ export default {
 
     window.axios.get('/api/car')
     .then((response) => {
-        //console.log(response.data);
         this.cars = response.data;
+        if(this.cars.length > 0) {
+            this.table2 = true;
+        }
     })
     .catch(function (error) {
-      // handle error
       console.log(error);
     });
-
 
   },
   data () {
     return {
       manufacturers: [],
+      table2: false, 
       form: {
         carname: '',
         color: '',
@@ -189,7 +191,7 @@ export default {
           manufacturer_id: this.form.manufacturer
         })
         .then( (response) => {
-            
+            this.table2 = true;
             this.cars.push(response.data);
             this.form.carname = '';
             this.form.color = '';
@@ -267,8 +269,33 @@ export default {
   }
 
   fieldset {
-    margin: 5%;
+    width: 100%;
+    margin-top: 5% !important;
   }
 
+  .form-group {
+    margin: 5px;
+  }
+
+  #color {
+    width: 150%;
+  }
+
+   .uploader-example {
+    width: 150%;
+    padding: 15px;
+    margin: 0px auto 0;
+    font-size: 12px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .4);
+  }
+  .uploader-example .uploader-btn {
+    margin-right: 4px;
+  }
+  .uploader-example .uploader-list {
+    max-height: 440px;
+    overflow: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
 
 </style>

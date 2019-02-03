@@ -21,7 +21,7 @@
 
     </div>
     <div class="col-md-6">
-        <b-table bordered hover :items="manufacturers" :fields="fields">
+        <b-table bordered hover :items="manufacturers" :fields="fields" v-if="table">
 
           <template slot="Sl No" slot-scope="data">
             {{data.index + 1}}
@@ -45,6 +45,7 @@
 export default {
   data () {
     return {
+      table: false,
       form: {
         manufacturername: '',
       },
@@ -62,6 +63,9 @@ export default {
     .then((response) => {
         //console.log(response.data);
         this.manufacturers = response.data;
+        if(this.manufacturers.length > 0){
+          this.table = true;
+        }
     })
     .catch(function (error) {
       // handle error
@@ -76,6 +80,7 @@ export default {
             name: this.form.manufacturername
         })
         .then( (response) => {
+            this.table = true;
             this.manufacturers.push(response.data);
             this.form.manufacturername = '';
             //console.log(response);
@@ -97,6 +102,9 @@ export default {
       .then((response) => {
           //console.log(response);
           this.manufacturers.splice(data.index,1);
+          if(this.manufacturers.length < 1) {
+            this.table = false;
+          }
       })
       .catch(function (error) {
         // handle error

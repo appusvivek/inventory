@@ -41,7 +41,6 @@
 </template>
 
 <script>
-import Pic from '../../../public/storage/files/media-sample.png';
 export default {
   data() {
     return {
@@ -69,11 +68,9 @@ export default {
   mounted() {
      window.axios.get('/api/inventory')
     .then((response) => {
-        //console.log(response.data);
         this.list = response.data;
     })
     .catch(function (error) {
-      // handle error
       console.log(error);
     });
   },
@@ -89,6 +86,17 @@ export default {
       .catch(function (error) {
         console.log(error);
       });
+
+      window.axios.post('/api/getpicture',{
+        picture: record.image2
+      })
+      .then((response) => {
+          this.modal.image2 = response.data;
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
       this.modal.carname = record.carname;
       this.modal.color = record.color;
       this.modal.manufacture_year = record.manufacture_year;
@@ -97,20 +105,16 @@ export default {
       this.modal.manufacturer = record.name;
       this.modal.carid = record.id;
       this.modal.index = index;
-      //this.modal.image1 = record.image1;
-      this.modal.image2 = record.image2;
       this.$refs.myModalRef.show()
 
     },
     hideModal() {
       window.axios.delete('/api/car/'+this.modal.carid)
       .then((response) => {
-          //console.log(response);
           this.list.splice(this.modal.index,1);
           this.$refs.myModalRef.hide()
       })
       .catch(function (error) {
-        // handle error
         console.log(error);
       });
     }
