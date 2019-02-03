@@ -7,11 +7,14 @@
             </div>
         </b-container>
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-12">
                 <manufacturer-component></manufacturer-component>
             </div>
-            <div class="col-md-6">
-                <view-manufacturer-component></view-manufacturer-component>
+            <div class="col-md-12">
+                <car-component></car-component>
+            </div>
+             <div class="col-md-12">
+                <inventory-component></inventory-component>
             </div>
         </div>
     </div>
@@ -20,7 +23,8 @@
 
 <script>
     import ManufacturerComponent from './Manufacturer.vue';
-    import ViewManufacturerComponent from './Viewmanufacturer.vue';
+    import CarComponent from './Cars.vue';
+    import InventoryComponent from './Inventory.vue';
 
     export default {
         mounted() {
@@ -28,7 +32,8 @@
         },
         components: {
             ManufacturerComponent,
-            ViewManufacturerComponent
+            CarComponent,
+            InventoryComponent
         }
     }
 </script>

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Manufacturer;
+use App\Car;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -35,6 +37,9 @@ class ManufacturerController extends Controller
     public function destroy($id){
         
         Manufacturer::destroy($id);
+        DB::table('cars')
+        ->where('manufacturer_id','=',$id)
+        ->delete();
 
         return response(null, Response::HTTP_OK);
     }

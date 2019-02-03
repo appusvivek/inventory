@@ -17,7 +17,7 @@ class CarController extends Controller
     public function store(Request $request){ 
         
         $data = new Car();
-        $data->name = $request->name;
+        $data->carname = $request->carname;
         $data->color = $request->color;
         $data->manufacture_year = $request->manufacture_year;
         $data->registration_no = $request->registration_no;
@@ -33,7 +33,7 @@ class CarController extends Controller
     public function update(Request $request, $id){
        
         $data = Car::findOrFail($id);
-        $data->name = $request->name;
+        $data->carname = $request->carname;
         $data->color = $request->color;
         $data->manufacture_year = $request->manufacture_year;
         $data->registration_no = $request->registration_no;

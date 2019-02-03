@@ -9,6 +9,24 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 import BootstrapVue from 'bootstrap-vue';
+import VueRouter from 'vue-router';
+import vUploader from 'v-uploader';
+
+// const uploaderConfig = {
+//     // file uploader service url
+//     uploadFileUrl: 'http://localost:8000/',
+//     language: 'en',
+//     // file delete service url
+//     deleteFileUrl: 'http://localost:8000/',
+//     // set the way to show upload message(upload fail message)
+//     showMessage: (vue, message) => {
+//         //using v-dialogs to show message
+//         vue.$vDialog.alert(message, null, {messageType: 'error'});
+//     }
+// };
+
+//Vue.use(vUploader, uploaderConfig);
+Vue.use(VueRouter);
 Vue.use(BootstrapVue);
 
 import 'bootstrap/dist/css/bootstrap.css'
@@ -30,12 +48,14 @@ Vue.config.performance = true;
 Vue.component('example-component', require('./components/App.vue').default);
 
 import App from './components/App.vue';
+import Cars from './components/Cars.vue';
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
+
 
 const app = new Vue({
     el: '#app',
