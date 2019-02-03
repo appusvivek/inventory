@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <div class="col-md-12">
-       <b-table bordered hover :items="list" :fields="fields" @row-clicked="rowClickHandler">
+       <b-table bordered hover :items="list" :fields="fields" @row-clicked="rowClickHandler" v-if="invtable">
 
         <template slot="Sl No" slot-scope="data">
         {{data.index + 1}}
@@ -16,6 +16,7 @@
         </template>
 
       </b-table>
+      <b-alert v-else variant="danger" show>Table data is empty!</b-alert>
     </div>
     <div>
 
@@ -44,12 +45,13 @@
 export default {
   data() {
     return {
+      invtable:false,
       list: [],
       fields:[
         'Sl No',
-        { key: 'name', label:'Manufacturer' },
-        { key: 'carname', label:'Car Name' },
-        { key: 'count', label: 'Count (Manufacturer)'}
+        { key: 'name', label:'Manufacturer', sortable:true },
+        { key: 'carname', label:'Car Name',sortable:true },
+        { key: 'count', label: 'Count (Manufacturer)',sortable:true}
       ],
       modal: {
         carname: '',
@@ -69,6 +71,9 @@ export default {
      window.axios.get('/api/inventory')
     .then((response) => {
         this.list = response.data;
+        if(this.list.length > 0){
+          this.invtable = true;
+        }
     })
     .catch(function (error) {
       console.log(error);

@@ -111,6 +111,7 @@
       </template>
 
       </b-table>
+      <b-alert v-else variant="danger" show>Table data is empty!</b-alert>
     </div>
   </div>
 </template>
@@ -162,7 +163,7 @@ export default {
       show: true,
       fields:[
         'Sl No',
-        { key: 'carname', label:'Car Name' },
+        { key: 'carname', label:'Car Name', sortable:true },
         'Action'
       ],
       cars:[],

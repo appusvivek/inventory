@@ -21,7 +21,7 @@
 
     </div>
     <div class="col-md-6">
-        <b-table bordered hover :items="manufacturers" :fields="fields" v-if="table">
+        <b-table bordered hover :items="manufacturers" :fields="fields" v-if="table" >
 
           <template slot="Sl No" slot-scope="data">
             {{data.index + 1}}
@@ -36,6 +36,8 @@
           </template>
 
         </b-table>
+        <b-alert v-else variant="danger" show>Table data is empty!</b-alert>
+
     </div>
   </div>
   
@@ -52,7 +54,7 @@ export default {
       show: true,
       fields:[
         'Sl No',
-        { key: 'name', label:'Manufacturer Name' },
+        { key: 'name', label:'Manufacturer Name',sortable: true },
         'Action'
       ],
       manufacturers: []
@@ -61,7 +63,6 @@ export default {
   mounted(){
     window.axios.get('/api/manufacturer')
     .then((response) => {
-        //console.log(response.data);
         this.manufacturers = response.data;
         if(this.manufacturers.length > 0){
           this.table = true;
@@ -75,7 +76,6 @@ export default {
   methods: {
     onSubmit (evt) {
       evt.preventDefault();
-      //alert(JSON.stringify(this.form));
         window.axios.post('/api/manufacturer', {
             name: this.form.manufacturername
         })
@@ -83,7 +83,6 @@ export default {
             this.table = true;
             this.manufacturers.push(response.data);
             this.form.manufacturername = '';
-            //console.log(response);
         })
         .catch(function (error) {
             console.log(error);

@@ -1957,6 +1957,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     var _this = this;
@@ -2002,7 +2003,8 @@ __webpack_require__.r(__webpack_exports__);
       show: true,
       fields: ['Sl No', {
         key: 'carname',
-        label: 'Car Name'
+        label: 'Car Name',
+        sortable: true
       }, 'Action'],
       cars: [],
       attrs: {
@@ -2162,19 +2164,24 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      invtable: false,
       list: [],
       fields: ['Sl No', {
         key: 'name',
-        label: 'Manufacturer'
+        label: 'Manufacturer',
+        sortable: true
       }, {
         key: 'carname',
-        label: 'Car Name'
+        label: 'Car Name',
+        sortable: true
       }, {
         key: 'count',
-        label: 'Count (Manufacturer)'
+        label: 'Count (Manufacturer)',
+        sortable: true
       }],
       modal: {
         carname: '',
@@ -2195,6 +2202,10 @@ __webpack_require__.r(__webpack_exports__);
 
     window.axios.get('/api/inventory').then(function (response) {
       _this.list = response.data;
+
+      if (_this.list.length > 0) {
+        _this.invtable = true;
+      }
     }).catch(function (error) {
       console.log(error);
     });
@@ -2296,6 +2307,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2306,7 +2319,8 @@ __webpack_require__.r(__webpack_exports__);
       show: true,
       fields: ['Sl No', {
         key: 'name',
-        label: 'Manufacturer Name'
+        label: 'Manufacturer Name',
+        sortable: true
       }, 'Action'],
       manufacturers: []
     };
@@ -2315,7 +2329,6 @@ __webpack_require__.r(__webpack_exports__);
     var _this = this;
 
     window.axios.get('/api/manufacturer').then(function (response) {
-      //console.log(response.data);
       _this.manufacturers = response.data;
 
       if (_this.manufacturers.length > 0) {
@@ -2330,8 +2343,7 @@ __webpack_require__.r(__webpack_exports__);
     onSubmit: function onSubmit(evt) {
       var _this2 = this;
 
-      evt.preventDefault(); //alert(JSON.stringify(this.form));
-
+      evt.preventDefault();
       window.axios.post('/api/manufacturer', {
         name: this.form.manufacturername
       }).then(function (response) {
@@ -2339,7 +2351,7 @@ __webpack_require__.r(__webpack_exports__);
 
         _this2.manufacturers.push(response.data);
 
-        _this2.form.manufacturername = ''; //console.log(response);
+        _this2.form.manufacturername = '';
       }).catch(function (error) {
         console.log(error);
       });
@@ -56013,7 +56025,9 @@ var render = function() {
                 }
               ])
             })
-          : _vm._e()
+          : _c("b-alert", { attrs: { variant: "danger", show: "" } }, [
+              _vm._v("Table data is empty!")
+            ])
       ],
       1
     )
@@ -56046,37 +56060,45 @@ var render = function() {
       "div",
       { staticClass: "col-md-12" },
       [
-        _c("b-table", {
-          attrs: {
-            bordered: "",
-            hover: "",
-            items: _vm.list,
-            fields: _vm.fields
-          },
-          on: { "row-clicked": _vm.rowClickHandler },
-          scopedSlots: _vm._u([
-            {
-              key: "Sl No",
-              fn: function(data) {
-                return [
-                  _vm._v("\n      " + _vm._s(data.index + 1) + "\n      ")
-                ]
-              }
-            },
-            {
-              key: "carname",
-              fn: function(data) {
-                return [_vm._v("\n      " + _vm._s(data.value) + "\n      ")]
-              }
-            },
-            {
-              key: "count",
-              fn: function(data) {
-                return [_vm._v("\n        " + _vm._s(data.value) + "\n      ")]
-              }
-            }
-          ])
-        })
+        _vm.invtable
+          ? _c("b-table", {
+              attrs: {
+                bordered: "",
+                hover: "",
+                items: _vm.list,
+                fields: _vm.fields
+              },
+              on: { "row-clicked": _vm.rowClickHandler },
+              scopedSlots: _vm._u([
+                {
+                  key: "Sl No",
+                  fn: function(data) {
+                    return [
+                      _vm._v("\n      " + _vm._s(data.index + 1) + "\n      ")
+                    ]
+                  }
+                },
+                {
+                  key: "carname",
+                  fn: function(data) {
+                    return [
+                      _vm._v("\n      " + _vm._s(data.value) + "\n      ")
+                    ]
+                  }
+                },
+                {
+                  key: "count",
+                  fn: function(data) {
+                    return [
+                      _vm._v("\n        " + _vm._s(data.value) + "\n      ")
+                    ]
+                  }
+                }
+              ])
+            })
+          : _c("b-alert", { attrs: { variant: "danger", show: "" } }, [
+              _vm._v("Table data is empty!")
+            ])
       ],
       1
     ),
@@ -56281,7 +56303,9 @@ var render = function() {
                 }
               ])
             })
-          : _vm._e()
+          : _c("b-alert", { attrs: { variant: "danger", show: "" } }, [
+              _vm._v("Table data is empty!")
+            ])
       ],
       1
     )
