@@ -41,10 +41,6 @@ class InventoryController extends Controller
           );
 
         return $filename;
-        
-        //$url = Storage::url($filename); 
-        
-        //$d = Storage::disk('local')->get($filename);
 
     }
     
