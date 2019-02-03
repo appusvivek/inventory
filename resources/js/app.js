@@ -12,19 +12,6 @@ import BootstrapVue from 'bootstrap-vue';
 import VueRouter from 'vue-router';
 import uploader from 'vue-simple-uploader';
 
-// const uploaderConfig = {
-//     // file uploader service url
-//     uploadFileUrl: 'http://localost:8000/',
-//     language: 'en',
-//     // file delete service url
-//     deleteFileUrl: 'http://localost:8000/',
-//     // set the way to show upload message(upload fail message)
-//     showMessage: (vue, message) => {
-//         //using v-dialogs to show message
-//         vue.$vDialog.alert(message, null, {messageType: 'error'});
-//     }
-// };
-
 Vue.use(uploader);
 Vue.use(VueRouter);
 Vue.use(BootstrapVue);
@@ -49,6 +36,31 @@ Vue.component('example-component', require('./components/App.vue').default);
 
 import App from './components/App.vue';
 import Cars from './components/Cars.vue';
+import Manufacturer from './components/Manufacturer.vue';
+import Inventory from './components/Inventory.vue';
+
+
+const router = new VueRouter({
+    mode: 'history',
+    routes: [
+        {
+            path: '/',
+            name: 'manufacturer',
+            component: Manufacturer
+        },
+        {
+            path: '/cars',
+            name: 'cars',
+            component: Cars
+        },
+        {
+            path: '/inventory',
+            name: 'inventory',
+            component: Inventory
+        }
+        
+    ]
+});
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -62,5 +74,5 @@ const app = new Vue({
     components:{
         App
     },
-    render: h =>h(App)
+    router
 });
