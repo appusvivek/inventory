@@ -58,11 +58,35 @@
                 </b-form-textarea>
           </b-form-group>
         
-          <!-- <b-form-group id="exampleInputGroup6"
-                        label="Note :"
+          <b-form-group id="exampleInputGroup6"
+                        label="Image 1:"
                         label-for="note">
-                  <b-button type="submit" variant="primary">Submit</b-button>
-          </b-form-group> -->
+                 
+                  <uploader :options="options" class="uploader-example" :fileStatusText="fileStatusText">
+                    <uploader-unsupport></uploader-unsupport>
+                    <uploader-drop>
+                      <p>Drop image here to upload or</p>
+                      <uploader-btn :attrs="attrs" :single="single">select image</uploader-btn>
+                    </uploader-drop>
+                    <uploader-list></uploader-list>
+                  </uploader>
+          </b-form-group>
+
+           <b-form-group id="exampleInputGroup7"
+                        label="Image 2:"
+                        label-for="note">
+                 
+                  <uploader :options="options" class="uploader-example" :fileStatusText="fileStatusText2" >
+                    <uploader-unsupport></uploader-unsupport>
+                    <uploader-drop>
+                      <p>Drop image here to upload or</p>
+                      <uploader-btn :attrs="attrs" :single="single">select image</uploader-btn>
+                    </uploader-drop>
+                    <uploader-list></uploader-list>
+                  </uploader>
+          </b-form-group>
+
+          
           <b-form-group >
             <b-button type="submit" variant="primary">Submit</b-button>
             <b-button type="reset" variant="danger">Reset</b-button>
@@ -98,15 +122,14 @@ export default {
     .then((response) => {
         //console.log(response.data);
         $.each(response.data, (key, val) => {
-          console.log(val);
           const obj = { value: val.id, text: val.name};
           this.manufacturers.push(obj);
         });
         //this.manufacturers = response.data;
     })
     .catch(function (error) {
-    // handle error
-    console.log(error);
+      // handle error
+      console.log(error);
     });
 
     window.axios.get('/api/car')
@@ -115,8 +138,8 @@ export default {
         this.cars = response.data;
     })
     .catch(function (error) {
-    // handle error
-    console.log(error);
+      // handle error
+      console.log(error);
     });
 
 
@@ -131,7 +154,8 @@ export default {
         registration_no: '',
         note: '',
         manufacturer: null,
-        file: ''
+        image1: '',
+        image2: ''
       },
       show: true,
       fields:[
@@ -139,7 +163,16 @@ export default {
         { key: 'carname', label:'Car Name' },
         'Action'
       ],
-      cars:[]
+      cars:[],
+      attrs: {
+          accept: 'image/*'
+      },
+      single:true,
+      options: {
+          target: '/api/image',
+          testChunks: false
+      },
+      
     }
   },
   methods: {
@@ -151,18 +184,21 @@ export default {
           manufacture_year: this.form.manufacturing_year,
           registration_no: this.form.registration_no,
           note: this.form.note,
-          image1: 'img1',
-          image2: 'img2',
+          image1: this.form.image1,
+          image2: this.form.image2,
           manufacturer_id: this.form.manufacturer
         })
         .then( (response) => {
+            
             this.cars.push(response.data);
             this.form.carname = '';
             this.form.color = '';
             this.form.manufacturing_year = '';
             this.form.registration_no = '';
             this.form.note = '';
-            console.log(response);
+            this.form.image1 = '';
+            this.form.image2 = '';
+            //console.log(response);
         })
         .catch(function (error) {
             console.log(error);
@@ -176,6 +212,8 @@ export default {
       this.form.manufacturing_year = '';
       this.form.registration_no = '';
       this.form.note = '';
+      this.form.image1 = '';
+      this.form.image2 = '';
       /* Trick to reset/clear native browser form validation state */
       this.show = false;
       this.$nextTick(() => { this.show = true });
@@ -183,14 +221,42 @@ export default {
     deleteBtn(data){
        window.axios.delete('/api/car/'+data.item.id)
       .then((response) => {
-          console.log(response);
+          //console.log(response);
           this.cars.splice(data.index,1);
       })
       .catch(function (error) {
-      // handle error
-      console.log(error);
+        // handle error
+        console.log(error);
       });
-    }
+    },
+    fileStatusText(status, response){
+        const statusTextMap = {
+          uploading: 'uploading',
+          paused: 'paused',
+          waiting: 'waiting'
+        }
+        if (status === 'success') {
+          // only use response when status is success or error
+          this.form.image1 = response;
+          return response.data
+        } else {
+          return statusTextMap[status]
+        }
+      },
+      fileStatusText2(status, response){
+        const statusTextMap = {
+          uploading: 'uploading',
+          paused: 'paused',
+          waiting: 'waiting'
+        }
+        if (status === 'success') {
+          // only use response when status is success or error
+          this.form.image2 = response;
+          return response.data
+        } else {
+          return statusTextMap[status]
+        }
+      }
 
   }
 }
@@ -203,4 +269,6 @@ export default {
   fieldset {
     margin: 5%;
   }
+
+
 </style>

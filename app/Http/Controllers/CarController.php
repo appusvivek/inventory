@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Car;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Storage;
 
 
 class CarController extends Controller
@@ -57,5 +58,16 @@ class CarController extends Controller
     
         return response(Car::findOrFail($id)->jsonSerialize(), Response::HTTP_OK);
 
+    }
+
+    public function getPicture(Request $request){
+        
+        $picture = $request->get('picture');
+        $result = '';
+        if($picture){
+            $result = Storage::disk('local')->get($picture);
+        }  
+        
+        return base64_encode($result);
     }
 }

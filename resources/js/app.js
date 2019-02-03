@@ -10,7 +10,7 @@ require('./bootstrap');
 window.Vue = require('vue');
 import BootstrapVue from 'bootstrap-vue';
 import VueRouter from 'vue-router';
-import vUploader from 'v-uploader';
+import uploader from 'vue-simple-uploader';
 
 // const uploaderConfig = {
 //     // file uploader service url
@@ -25,7 +25,7 @@ import vUploader from 'v-uploader';
 //     }
 // };
 
-//Vue.use(vUploader, uploaderConfig);
+Vue.use(uploader);
 Vue.use(VueRouter);
 Vue.use(BootstrapVue);
 

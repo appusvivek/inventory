@@ -64,8 +64,8 @@ export default {
         this.manufacturers = response.data;
     })
     .catch(function (error) {
-    // handle error
-    console.log(error);
+      // handle error
+      console.log(error);
     });
   },
   methods: {
@@ -78,7 +78,7 @@ export default {
         .then( (response) => {
             this.manufacturers.push(response.data);
             this.form.manufacturername = '';
-            console.log(response);
+            //console.log(response);
         })
         .catch(function (error) {
             console.log(error);
@@ -95,12 +95,12 @@ export default {
     deleteBtn(data){
        window.axios.delete('/api/manufacturer/'+data.item.id)
       .then((response) => {
-          console.log(response);
+          //console.log(response);
           this.manufacturers.splice(data.index,1);
       })
       .catch(function (error) {
-      // handle error
-      console.log(error);
+        // handle error
+        console.log(error);
       });
     }
   }

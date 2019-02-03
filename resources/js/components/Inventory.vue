@@ -29,6 +29,8 @@
           <p>Year : {{this.modal.manufacture_year}}</p>
           <p>Registration No : {{this.modal.registration_no}}</p>
           <p>Note : {{this.modal.note}}</p>
+          <p>Image 1 : <img v-bind:src="'data:image/jpeg;base64,'+ this.modal.image1" /></p>
+          <p>Image 2 : <img v-bind:src="'data:image/jpeg;base64,'+ this.modal.image2" /></p>
         </div>
         <b-btn class="mt-3" variant="outline-danger" block @click="hideModal()">Sold</b-btn>
       </b-modal>
@@ -39,6 +41,7 @@
 </template>
 
 <script>
+import Pic from '../../../public/storage/files/media-sample.png';
 export default {
   data() {
     return {
@@ -57,24 +60,35 @@ export default {
         note: '',
         manufacturer: '',
         carid: '',
-        index: ''
+        index: '',
+        image1: '',
+        image2: ''
       }
     }
   },
   mounted() {
      window.axios.get('/api/inventory')
     .then((response) => {
-        console.log(response.data);
+        //console.log(response.data);
         this.list = response.data;
     })
     .catch(function (error) {
-    // handle error
-    console.log(error);
+      // handle error
+      console.log(error);
     });
   },
   methods: {
     rowClickHandler(record, index) {
       //console.log(record.id);
+      window.axios.post('/api/getpicture',{
+        picture: record.image1
+      })
+      .then((response) => {
+          this.modal.image1 = response.data;
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
       this.modal.carname = record.carname;
       this.modal.color = record.color;
       this.modal.manufacture_year = record.manufacture_year;
@@ -83,19 +97,21 @@ export default {
       this.modal.manufacturer = record.name;
       this.modal.carid = record.id;
       this.modal.index = index;
+      //this.modal.image1 = record.image1;
+      this.modal.image2 = record.image2;
       this.$refs.myModalRef.show()
 
     },
     hideModal() {
       window.axios.delete('/api/car/'+this.modal.carid)
       .then((response) => {
-          console.log(response);
+          //console.log(response);
           this.list.splice(this.modal.index,1);
           this.$refs.myModalRef.hide()
       })
       .catch(function (error) {
-      // handle error
-      console.log(error);
+        // handle error
+        console.log(error);
       });
     }
   }

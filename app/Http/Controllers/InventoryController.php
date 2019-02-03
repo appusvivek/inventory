@@ -7,6 +7,7 @@ use App\Manufacturer;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 
 class InventoryController extends Controller
@@ -26,6 +27,25 @@ class InventoryController extends Controller
             $data[$key]->count = $count;
         }
         return response($data->jsonSerialize(), Response::HTTP_OK);
+    }
+
+    public function image(Request $request){
+
+        $filename = $request->get('filename');
+        $foldername= 'files';
+        $data = $request->file('file');
+        $upload = Storage::disk('local')->putFileAs(
+            '',
+            $data,
+            $filename
+          );
+
+        return $filename;
+        
+        //$url = Storage::url($filename); 
+        
+        //$d = Storage::disk('local')->get($filename);
+
     }
     
 }

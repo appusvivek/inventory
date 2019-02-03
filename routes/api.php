@@ -19,6 +19,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::get('/inventory', 'InventoryController@index');
 
+Route::post('/getpicture', 'CarController@getPicture');
+
+Route::post('/image', 'InventoryController@image');
+
 Route::resource('/manufacturer', 'ManufacturerController', [
     'except' => ['edit', 'show', 'create']
 ]);
